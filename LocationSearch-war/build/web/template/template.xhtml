@@ -1,0 +1,238 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+        <script type="text/javascript"
+        src="http://maps.google.com/maps/api/js?sensor=true"></script>
+        <link rel="stylesheet" type="text/css" href="../style/stat.css"/>
+        <style type="text/css">
+            html,body{
+                padding: 0px;
+                margin: 0px;
+                
+                
+            }
+            table{
+                margin: 5px 9px 5px 9px;
+            }
+            .common{
+                font-family: serif;
+                font-size: 13px;
+                vertical-align: top;
+            }
+            #wrapper{
+                position: absolute;
+                width: 100%;
+                height: 100%;
+
+            }
+            #side{
+                width: 35%;
+                height: 100%;
+                margin: auto;
+                float: left; 
+
+                padding: 8px 3px 4px 3px;
+            }
+            #info{
+                margin-left: auto;
+                margin-right: auto;
+                width: 90%;
+                height:100%;
+
+                padding: 5px 3px 5px 3px;
+                background-color: /*#86A9AB;*/rgb(247, 247, 247);
+
+                -moz-box-shadow: 0 0 5px #888;
+                -webkit-box-shadow: 0 0 5px#888;
+                box-shadow: 0 0 5px #888;
+                
+            }
+            #info span{
+                margin-top: 10px;
+                margin-left: 9px;
+                margin-bottom: 10px;
+                font-family: bazooka;
+                color: #423232;
+                font-size: 15px;
+            }
+            #linkTitle:hover{
+                text-decoration: underline;
+            }
+            #info .error{
+                font-family: sans-serif;
+                font-size: 16px;
+                display: block;
+                
+                /*color:#FF0000;*/
+                
+                margin: 8px 2px 2px 9px;
+            }
+            #info .error span{
+                font-size: 14px;
+                color: #000099;
+            }
+            
+            #info ul{
+                font-size: 15px;
+                color: #1A1A1A;
+                
+                margin: 1px 2px 2px 9px
+            }
+            
+            #info ul li{
+                margin-bottom: 5px;
+            }
+            
+            #info h3{
+                font-family: sans-serif;
+                font-size: 16px;
+                display: block;
+
+                background-color: rgb(184, 185, 185);
+                padding: 5px 2px 5px 12px;
+                color: rgb(102, 98, 98);
+                
+                width: 200px;
+                height:auto;
+                margin-top:0px;
+            }
+            #info p{
+                font-family: sans-serif;
+                font-size: 13px;
+                color: rgb(102, 98, 98);
+                
+                margin: 5px 7px 5px 7px;
+            }
+            #info a:link{
+                text-decoration: none;
+            }
+            #info footer{
+                width: 100%;
+                margin-top: 15px;
+                
+                color: rgb(45, 59, 223);
+                padding-left: 12px;
+            }
+            #info footer a:link{
+                color: #8695ce;
+                font-size: 12px;
+            }
+            #info footer a:hover{
+                color: #2b43a3;
+            }
+            #gmap_window{
+                width: auto;
+                padding: 5px 9px 5px 9px;
+            }
+            
+            #gmap_window tr{
+                padding: 4px 8px 4px 8px;
+                margin-top: 5px;
+                border-bottom: 1px #888 solid;
+            }
+            #gmap_window tr td{
+                text-align: center;
+                font-size: 12px;
+            }
+            #content{
+                width: 100%;
+                height: 100%;
+                margin: auto;
+
+                padding: 8px 5px 8px 5px;
+            }
+            #content_wrapper{
+                width: 100%;
+                height:auto;
+            }
+            header{
+                background-color:#dbe2e2 ;
+                /*top: 0px;
+                right: 0px;
+                left:0px;
+                position: absolute;*/
+
+                width: 100%;
+                height:auto;
+
+                border-bottom: #898989 ridge 1px;
+            }
+            header nav{
+                width: 100%;
+                background-color: /*#363c3c;*/#090912;
+                height : 35px;
+            }
+            header nav a{
+                position: relative;
+                top: 8px;
+                left: 20px;
+
+                text-decoration: none;
+                font-family: serif;
+                size: 14px;
+                color: #bfc9ca;
+
+                display: box;
+                margin-right: 15px;
+            }
+            header nav a:hover{
+                color: #898989;
+            }
+            #search{
+                width:100%;
+                height: 45px;
+
+                margin: 0px;
+                padding: 8px 2px 2px 5px;
+                background-color: rgb(247, 247, 247) /*rgb(199, 202, 188)*/;
+
+                border-bottom: #E0EDD7 groove 1px;
+            }
+
+
+            .ui-button {
+                display: inline-block;
+                position: relative;
+                padding: 0;
+                margin-right: .1em;
+                text-decoration: none !important;
+                cursor: pointer;
+
+                zoom: 1;
+                overflow: visible;
+
+                font-size: 14px;
+                /*background-image: url('../img/toolbar_find.png');*/
+                text-align: center;
+            }
+            .ui-inputfield {
+                margin: 0 6px;
+                padding: 4px;
+                font-weight: normal;
+                width: 450px;
+                height: 25px;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <div id="wrapper">
+            <header>
+                <nav>
+                    <a href="../faces/search.xhtml">Search</a>
+                    <a href="../faces/statistics.xhtml">Statistics</a>
+                </nav>
+            </header>
+            <section id="content_wrapper">
+                <ui:insert name="content">
+                    <ui:include src="../search.xhtml"/>
+                </ui:insert>
+            </section>
+        </div>
+    </h:body>
+</html>
+

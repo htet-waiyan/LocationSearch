@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+        <style type="text/css">
+            #default{
+                width: 100%;
+                height:100%;
+                
+                padding: 5px 3px 5px 3px;
+            }
+            #default h3{
+                font-family: sans-serif;
+                font-size: 16px;
+                display: block;
+                
+                padding: 3px 6px 3px 4px;
+                width: 200px;
+                height:auto;
+            }
+            #default p{
+                font-family: sans-serif;
+                font-size: 13px;
+            }
+            #default a:link{
+                text-decoration: none;
+            }
+            #default footer{
+                width: 100%;
+                margin-top: 15px;
+            }
+            #default footer a:link{
+                color: #8695ce;
+                font-size: 12px;
+            }
+            #default footer a:hover{
+                color: #2b43a3;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <ui:composition template="template/template.xhtml">
+            <ui:define name="search"></ui:define>
+            <ui:define name="side">
+        <div id="default">
+            <h3>Team 1 Location Search</h3>
+            <p>
+                <b>Welcome to Location Search!</b>
+                If you want to search for a place, simply enter your keyword 
+                into a search box at the top of the page.
+            </p>
+            <p>
+                Do you want to view statistical data of a particular place?
+                <small><a href="statistic.xhtml">Click Here</a></small>.
+            </p>
+            <hr/>
+            <footer>
+                <small>
+                    Location Search @2013 Team 1.
+                    &nbsp;&nbsp;
+                    <a href="aboutus.xhtml">About Us</a>
+                    &nbsp;
+                    <a href="blog.xhtml">Blog</a>
+                </small>
+            </footer>
+        </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

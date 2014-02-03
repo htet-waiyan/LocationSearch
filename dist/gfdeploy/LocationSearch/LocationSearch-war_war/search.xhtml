@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <style type="text/css">
+            #side{
+                width: 35%;
+                height: 100%;
+                margin: auto;
+                float: left;
+
+                border-right: #898989 ridge 1px;
+            }
+            #content{
+                width: 100%;
+                height: 100%;
+                margin: auto;
+            }
+            #search{
+                width:100%;
+                height: 40px;
+
+                margin: 0px;
+                padding: 5px 2px 2px 5px;
+                background-color: #bdc2c0;
+
+                border-bottom: #898989 ridge 1px;
+            }
+            .ui-inputfield {
+                margin: 0 6px;
+                padding: 4px;
+                font-weight: normal;
+                width: 450px;
+                height: 34px;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <ui:composition template="template/template.xhtml">
+            <ui:define name="content">
+                <div id="search">
+                    <h:form id="f1" style="position: absolute; left: 35%;">
+                        <p:autoComplete id="txtSearch" value="#{search.searchQuery}"
+                                        completeMethod="#{search.autoComplete}"/>
+                        <p:growl id="searchGrowl" for="f1:txtSearch" showDetail="true"/>
+                        <p:watermark id="watermark" value="search locations" for="txtSearch"/>
+                        <p:commandButton id="btnSearch" value="Search" ajax="false" action="#{search.searchPlace()}"
+                                         update="growl" actionListener="#{search.searchListener}" />
+                    </h:form>   
+                </div>
+                <div id="side">
+                    <div id="info">
+                        <h:panelGroup id="foundGroup" rendered="#{search.state eq 'Found'}">
+                            <span>We found:</span>
+                            <hr/>
+                            <h:panelGroup id="equalOne" rendered="#{search.searchedplace.size() eq 1}">
+                                <h3>
+                                    <h:outputText  value="#{search.selectedPlace.name}"/>
+                                </h3>
+                                <img src="#{search.selectedPlace.imagePath}" width="300px" height="180px"
+                                     style="padding-left: 9px;"/>
+                                <p>
+                                    <h:outputText  value="#{search.selectedPlace.name}"/><br/>
+                                    <h:outputText  value="#{search.selectedPlace.address}"/><br/>
+                                    <h:outputLink  value="#{search.selectedPlace.url}"/><br/>
+                                    
+                                </p>
+                            </h:panelGroup>
+                            <h:panelGroup id="greaterOne" rendered="#{search.searchedplace.size() gt 1}">
+                                <table id="resultList"  style="margin:3px 4px 4px 4px">
+                                    <h:form id="display_form">
+                                    <ui:repeat var="place" varStatus="count" value="#{search.searchedplace}">
+                                        <tr>
+                                            <td colspan="2">
+                                                <h:commandLink id="linkTitle" style="color: #698fe7;" value="#{place.name}" action="#{search.showThePlaceOnMap()}">
+                                                    <f:param name="index" value="#{count.index}"/>
+                                                </h:commandLink>
+                                                
+                                            </td>
+                                            <td rowspan="2">
+                                                <img id="placeThumb" src="#{place.imagePath}" width="40px" height="40px"/>
+                                            </td>
+                                        </tr>
+                                        <tr style="padding-bottom: 4px;">
+                                            <td class="common">
+                                                #{place.address}<br/>
+                                                <h:outputLink id="linkUrl" style="color: #698fe7;" value="#{place.url}">
+                                                    #{place.url}
+                                                </h:outputLink>
+                                            </td>
+                                            
+                                        </tr>
+                                    </ui:repeat>
+                                    </h:form>
+                                </table>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                        <h:panelGroup id="not_found" rendered="#{search.state eq 'Not Found'}">
+                            <p id="eror_wrapper" class="error" style="color:#FF0000;">
+                                Did you mean: 
+                                <span id="error_body">
+                                    <h:outputText id="errorMsg" value="#{search.searchQuery}"/>
+                                </span>
+                            </p>
+                            <p class="error" style="color:#1A1A1A;">
+                                We could not understand the location <b><h:outputText value="#{search.searchQuery}"/></b>
+                            </p>
+                            <p class="error" style="color:#1A1A1A;">
+                                Suggestions:
+                            </p>
+                            <ul>
+                                <li>Make sure all street and city names are spelled correctly.</li>
+                                <li>Make sure your address includes a city and state.</li>
+                                <li>Try entering a zip code.</li>
+                            </ul>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{search.state eq 'Default'}">
+                            <h3>Team1 LocationSearch</h3>
+                            <img src="img/location1.jpg" width="300px" height="180px"
+                                 style="padding-left:9px; "/>
+                            <p>
+                                <b>Welcome to Location Search!</b>
+                                If you want to search for a place, simply enter your keyword 
+                                into a search box at the top of the page.
+                            </p>
+                            <p>
+                                Do you want to view statistical data of a particular place?
+                                <small><a href="statistic.xhtml">Click Here</a></small>.
+                            </p>
+                        </h:panelGroup>
+                        <hr/>
+                        <footer>
+                            <small>
+                                Location Search @2013 Team 1.
+                                &nbsp;&nbsp;
+                                <a href="aboutus.xhtml">About Us</a>
+                                &nbsp;
+                                <a href="blog.xhtml">Blog</a>
+                            </small>
+                        </footer>
+                    </div>
+                </div>
+                <div id="content">
+                    <p:gmap id="map" center="#{search.map.coordinates.lat},#{search.map.coordinates.lng}" style="width:600px;height:450px;
+                            -moz-box-shadow: 0 0 5px #888;
+                            -webkit-box-shadow: 0 0 5px#888;
+                            box-shadow: 0 0 5px #888;" 
+                            zoom="15" type="ROADMAP" streetView="true"
+                            model="#{search.map.mapModel}"
+                            >
+                        <p:ajax id="mapAjax" event="overlaySelect" listener="#{search.map.onMarkerSelect}"/>
+                        <p:gmapInfoWindow id="infoWindow">
+                            <p:outputPanel id="outputPanel" style="text-align:center;display:block;margin:auto:">
+                                <table id="gmap_window">
+                                    <tr>
+                                        <td>
+                                            <img src="#{search.map.marker.data['logo']}" 
+                                                 width="150px" height="100px"
+                                                 border="1px"/>
+                                        </td> 
+                                        
+                                        <td width="140px">
+                                            <b>#{search.map.marker.data['name']}</b><br/>
+                                            #{search.map.marker.data['address']}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" align="left">
+                                            <a href="#{search.map.marker.data['url']}">#{search.map.marker.data['url']}</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                                
+                            </p:outputPanel>
+                        </p:gmapInfoWindow>
+                    </p:gmap>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

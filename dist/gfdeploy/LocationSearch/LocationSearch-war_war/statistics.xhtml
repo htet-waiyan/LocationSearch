@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="template/template.xhtml">
+            <ui:define name="content">
+                <div id="stat_wrapper">
+                    <div id="rank">
+                        <h3 class="title">Top 5 Places Of All Time</h3>
+                        <ol>
+                            <ui:repeat value="#{stat.topPlaces}" var="place" varStatus="count" >
+                                <li>
+                                    #{place.name}<br/>
+                                    <small>#{place.address}</small>
+                                </li>
+                            </ui:repeat>
+                        </ol>
+                    </div>
+                    <div id="chart">
+                        <article id="top">
+                            Choose Date : &nbsp;
+                            <h:form id="cal">
+                                <p:calendar value="#{stat.selectedDate}" showOn="button" required="true"/>
+                                <p:commandButton ajax="false" value="Submit" action="#{stat.retrieveStatTop5Places()}"/>
+                            </h:form>
+                        </article>
+                        <div>
+                            <h:panelGroup rendered="#{stat.state eq 'found'}">
+                                <p:pieChart id="sf" legendPosition="w" title="Statistical Information" 
+                                            style="width:500px; height: 400px;margin-left: auto;
+                                            margin-right: auto; margin-top: 25px;
+                                            background-color: #EFF7F3;
+                                            -moz-box-shadow: 0px 0px 12px #888;
+                                            -webkit-box-shadow: 0px 0px 12px #888;
+                                            box-shadow: 0px 0px 12px #888;
+                                            border-radius: 6px 6px 6px 6px;
+                                            padding-top: 5px;" 
+                                            value="#{stat.pieChart.chartModel}"
+                                            showDataLabels="true"/>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{stat.state eq 'not_found'}">
+                                <div id="msg">
+                                    The selected date 
+                                    <h:outputLabel value="#{stat.selectedDate}">
+                                        <f:convertDateTime type="Date" pattern="dd/MM/yyyy"/>
+                                    </h:outputLabel> has not statistic data.<br/>
+                                    We apologize for this inconvenient.<br/>
+                                    We suggest that<br/>
+                                    <ul>
+                                        <li>Select the date again to view the statistic data.</li>
+                                        <li>If you think that it was a bug,
+                                            please report <a href="#">here</a>.
+                                        </li>
+                                    </ul>
+                                </div>
+                            </h:panelGroup>
+                    </div>
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+
